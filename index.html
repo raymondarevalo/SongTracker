@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title> </title>
+		<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+
+		<!-- jQuery library -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+		<!-- jQuery UI library -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+		<!-- Firebase JavaScript client library -->
+		<script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js"></script>
+		<script src="js/bootstrap.js"></script> <!-- bootstrap javascript -->
+
+		<script>
+		  // Initialize Firebase
+		  var config = {
+		    apiKey: "AIzaSyCGAOStJNfnBcDWQH5-9gntwvImwsx_QUk",
+		    authDomain: "spotifysongtracker.firebaseapp.com",
+		    databaseURL: "https://spotifysongtracker.firebaseio.com",
+		    storageBucket: "spotifysongtracker.appspot.com",
+		  };
+		  firebase.initializeApp(config);
+
+		  var database = firebase.database();
+		</script>
+		<!-- END OF FIREBASE -->
+
+		<!-- bootstrap -->
+		<link href = "css/bootstrap.min.css" rel = "stylesheet">
+		<link href = "css/style.css" rel = "stylesheet">
+
+
+		<script src = "firebaseSendReceive.js"></script> 
+
+		<script>
+		window.onload = inOut;
+		</script>
+
+	</head>
+
+	<body>
+        <div class = "navbar navbar-default navbar-fixed-top">
+            <!-- centers and pad navbar content -->
+            <div clas = "container">
+                
+                
+            	<div class = "row">
+            		<div class = "col-xs-10 firstCol" id = "fCol">
+            			
+            		</div>
+
+            		<div class = "col-xs-2 secondCol" id = "sCol">
+            			
+            		</div>
+            	</div>
+            </div>
+        </div>
+
+        <br> <br> <br> <br> <br> <br>     
+
+
+        <section id = "mainBody" style="display:none">
+        	<div class = "container" id = "formContainer">
+        		<div class = "row">
+	        		<form id = "submitSong" action="form_action.asp">
+	        			
+		        			<div class = "col-lg-5 songCol">
+							    <label for="songID">Song</label>
+							    <input type="text" class="form-control" id="songID" name = "song">
+		        			</div>
+		        			<div class = "col-lg-5 artistCol">
+							    <label for="artistID">Artist</label>
+							    <input type="text" class="form-control" id="artistID" name = "artist">
+		        			</div>
+	     
+	        		</form>
+		        			<div class = "col-lg-2 submitCol">
+		        				<button onclick = "separateNames()" class = "submitSong">Submit song</button>
+		        			</div>	        		
+        		</div>
+        	</div>
+        </section>
+		<div id = "successfulAlert" class = "container">
+
+		</div>
+ <!--
+		<form id ="submitSong" action="form_action.asp">
+			Song: <input type = "text" name="song">
+			Artist: <input type = "text" name = "artist"> 
+		</form>
+
+		<button onclick = "separateNames()"> Submit Song </button>
+		<p id="demo"></p>
+
+
+
+
+<form class="form-inline">
+  <div class="form-group">
+    <label for="exampleInputName2">Name</label>
+    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputEmail2">Email</label>
+    <input type="email" class="form-control" id="exampleInputEmail2" placeholder="jane.doe@example.com">
+  </div>
+  <button type="submit" class="btn btn-default">Send invitation</button>
+</form>
+
+-->
+
+        
+		<!--
+		<button onclick ="logIn()"> log in </button>
+
+		<button onclick = "whoIsIn()"> who is in </button>
+
+		<button onclick ="signOut()"> sign out </button>
+
+		<br> <br> <br>
+
+		<form id ="submitSong" action="form_action.asp">
+			Song: <input type = "text" name="song">
+			Artist: <input type = "text" name = "artist"> 
+		</form>
+
+		<button onclick = "separateNames()"> Submit Song </button>
+		<p id="demo"></p>
+		-->
+		
+
+		<!-- Calls my external JavaScript File 
+		<script src = "changes.js"></script> -->
+
+
+	</body>
+</html>

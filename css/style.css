@@ -1,0 +1,61 @@
+.firstCol{
+	background-color: white;
+	height: 50px;
+}
+
+.secondCol {
+	background-color: green;
+	height: 50px;
+}
+
+
+
+#signInButton {
+	background-color: black;
+	color: white;
+	height: 100%;
+	width: 100%;
+	border: none;
+}
+
+#signOutButton {
+	height: 100%;
+	width: 100%;
+}
+
+.secondCol {
+	padding: 0;
+}
+
+#mainBody {
+	
+
+}
+
+
+.songCol {
+	background-color: white
+}
+
+.artistCol {
+	background-color: white;
+}
+
+.submitCol {
+	background-color: white;
+	height: 100%;
+	margin: none;
+	padding: 0;	
+}
+
+.submitSong {
+	height: 60px;
+	width: 100%;
+	background-color: white;
+    border-style: solid;
+    border-width: 1px;
+
+}
+
+
+
