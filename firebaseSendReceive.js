@@ -52,6 +52,8 @@ function inOut() {
 
 var currentUser = null;
 var wholeString = null;
+var toPlaylist = null;
+var currentPlaylist = {};
 
 function signIn() {
 	console.log("Enter login");
@@ -86,6 +88,7 @@ function signIn() {
 
 function setUser(user) {
 	wholeString = 'users/' + user + '/music/songTracker/Artist/';
+	toPlaylist = 'users/' + user + '/music/pastPlaylist/';
 	console.log("wholeString: " + wholeString);
 }
 
@@ -179,6 +182,8 @@ function addTrack(song, artist) {
 			console.log("Artist is not there, and thus is new");
 			createArtist(artist);
 			addSong(song, artist);
+			insertSongInPlaylist(song, artist);
+			// update playlist
 					}
 		/* If the artist is there, then check the song */
 		else {
@@ -194,7 +199,7 @@ function addTrack(song, artist) {
 function createArtist(artist) {
 
 	firebase.database().ref(wholeString + artist).set({
-		count: "0"
+		count: 0
 	});	
 }
 
@@ -208,6 +213,8 @@ function checkSong(song, artist) {
 		if(snapshot.val() === null) {
 			console.log("Song is not there");
 			addSong(song, artist);
+			// update playlist
+			insertSongInPlaylist(song, artist);
 		}
 		/* If you've played the song before, warn the user and ask if he/she wants to play it again */
 		else {
@@ -216,6 +223,10 @@ function checkSong(song, artist) {
 			var answer = confirm("You've played this track before. Would you like to play it again?");
 			if(answer) {
 				updateSong(song, artist);
+				updateArtistCount(artist);
+
+				insertSongInPlaylist(song, artist);
+				console.log("does it mess up here?");
 				loadSuccess();
 			}
 			else { loadFailure(); }	
@@ -230,6 +241,9 @@ function addSong(song, artist) {
 	firebase.database().ref(wholeString + artist + '/' + song).set({
 		count: 1
 	});
+	/* update count */
+	updateArtistCount(artist);
+
 	loadSuccess();
 }
 
@@ -244,7 +258,119 @@ function updateSong(song, artist) {
 	});
 }
 
+function updateArtistCount(artist) {
+	var currentArtist = firebase.database().ref(wholeString + artist + '/count');
+	currentArtist.transaction(function(currentCount) {
+		console.log("Current Count: " + currentCount);
+		return currentCount + 1;
+	});
+}
+
 
 function online() {
+
+}
+
+
+function getPastPlaylist() {
+
+firebase.database().ref(toPlaylist).once("value").then(function(snapshot) {
+	var amountOfChildren = snapshot.numChildren();
+	var i = amountOfChildren; 
+	var y = 0;
+
+	while( (0<i) && ( (amountOfChildren-5) < i ) ) {
+		
+
+		firebase.database().ref(toPlaylist + i).once("value").then(function(snapshot) {
+			currentPlaylist[y] = snapshot.val();
+
+
+			var newDiv = document.createElement("h3");
+			var idName = "h" + y;
+			newDiv.setAttribute("id", idName);
+			document.getElementById("songBody").appendChild(newDiv);
+
+			document.getElementById(idName).innerHTML = snapshot.val();
+			++y;
+		});
+
+		--i;
+	}
+
+	
+});
+
+
+}
+
+
+
+
+function insertSongInPlaylist(song, artist) {
+
+
+	console.log("Current date and time -   " + currentDateTime());
+
+	firebase.database().ref(toPlaylist).once("value").then(function(snapshot) {
+		var updates = {};
+		var currentIndex = snapshot.numChildren()+1
+		var line = song + " . " + artist + ". " + currentDateTime();
+		updates[toPlaylist + currentIndex] = line;
+
+		updateCurrentPlaylist(line);
+		return firebase.database().ref().update(updates);
+
+	});
+	/* Artist - song - date - time */
+	/* Insert song into pastPlaylist */
+}
+
+
+
+
+
+/* Updates the current playlist on the 
+ * page with the song just inserted 
+ */
+function updateCurrentPlaylist(line) {
+	var newDiv = document.createElement("h3");
+	newDiv.innerHTML = line;
+	var container = document.getElementById("songBody");
+	container.insertBefore(newDiv, container.firstChild);
+
+}
+
+/* Returns current date and time */
+function currentDateTime() {
+
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1; //January is 0!
+	var yyyy = today.getFullYear();
+
+	var hrs = today.getHours();
+	var mins = today.getMinutes();
+	var secs = today.getSeconds();
+
+	return mm + "-" + dd + "-" + yyyy + " . " + hrs + ":" + mins + ":" + secs;
+}
+
+
+
+function currentPastPlaylist() {
+	// get the current top artists
+}
+
+
+/* Function that retrieves top 5 most played artists by the user */
+/* Gets artists - amount the artist has been played - last played */
+function topArtists() {
+
+}
+
+/* Function that retrieves the last 5 songs played */
+/* artist - song - date - time */
+function pastPlaylist() {
 
 }
