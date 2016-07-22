@@ -43,6 +43,23 @@ function inOut() {
 }
 
 
+/*
+function bucketsTest() {
+	console.log("Inside of the bucketsTest()");
+	var a = new buckets;
+
+	a.add(5);
+	a.add(3);
+	a.add(11);
+	a.add(5);
+	a.add(6);
+	a.add(1);
+
+	console.log("Size of the bucket: " + a.size();
+
+
+}
+*/
 
 
 
@@ -67,6 +84,8 @@ function signIn() {
 			  /* Sets our current user */
 			  setUser(user.uid);
 			  inOut();
+			  getPastPlaylist();
+			  topArtists();
 
 
 			  /* CHANGE THE BODY OF THE PAGE TO LOAD THE SONG FORM */
@@ -362,11 +381,42 @@ function currentPastPlaylist() {
 	// get the current top artists
 }
 
+var topArtistsArr = [];
 
 /* Function that retrieves top 5 most played artists by the user */
 /* Gets artists - amount the artist has been played - last played */
 function topArtists() {
+	var ref = firebase.database().ref(wholeString);
+	ref.once("value", function(snapshot) {
+		snapshot.forEach(function(childSnapshot) {
+			console.log("value: " + childSnapshot.val()["count"]);
+			console.log("key: " + childSnapshot.key);
+			var pair = [childSnapshot.val()["count"], childSnapshot.key];
+			topArtistsArr.push(pair);
+		});
+		
 
+		topArtistsArr.sort(function(a, b){
+			return b[0] - a[0];
+		});
+		
+		
+
+		/* At this point we have the top artist in order */
+
+		topArtistsArr.slice(0,5).forEach(function(body) {
+
+
+			var newDiv = document.createElement("h3");
+			var idName = "ID" + body[1];
+			newDiv.setAttribute("id", idName);
+			document.getElementById("topBody").appendChild(newDiv);
+
+			document.getElementById(idName).innerHTML = "Plays " + body[0] + " Artist:   \t " + body[1];
+		});
+
+	});
+	
 }
 
 /* Function that retrieves the last 5 songs played */

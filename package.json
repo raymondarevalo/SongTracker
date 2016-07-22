@@ -1,0 +1,23 @@
+{
+  "name": "songtracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "firebaseSendReceive.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raymondarevalo/SongTracker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/raymondarevalo/SongTracker/issues"
+  },
+  "homepage": "https://github.com/raymondarevalo/SongTracker#readme",
+  "dependencies": {
+    "buckets-js": "^1.98.1",
+    "google-closure-library": "^20160713.0.0"
+  }
+}
