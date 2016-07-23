@@ -1,40 +1,54 @@
+/* Creator: Raymond Arevalo
+ * About project: This project tracks the songs played by the user. It's
+ * meant to bring a simple tracker that will allow the user to know if
+ * he or she has played the song.
+ * 
+ */
 
+/* --------------------- GLOBAL VARIABLS ------------------------ */
+var currentUser = null;		/* Our current user */
+var wholeString = null;		/* Our current string to our directory */
+var toPlaylist = null;		/* String to the recent played songs directory */
+var currentPlaylist = {};	/* Contains our current past playlist */
+
+
+
+/* ----------------------- SIGN IN/OUT : START ------------------------- */
+/* Global sign in button */
 var signInButton = document.createElement("BUTTON");
+
+/* Global sign out button */
 var signOutButton = document.createElement("BUTTON");
 
+/* Sets the buttons' IDs */
 signInButton.setAttribute("id", "signInButton");
 signOutButton.setAttribute("id", "signOutButton");
 
+/* Sets the buttons' type */
 signInButton.setAttribute("type", "button");
 signOutButton.setAttribute("type", "button");
 
+/* Setting the function for each given function */
 signInButton.setAttribute("onClick", "signIn()");
-
 signOutButton.setAttribute("onClick", "signOut()");
 
-/* Signs any account out once the page is loaded */
-
-/*firebase.auth().signOut().then(function() {
-}, function(error) {
-}); */
 
 
-
+/* Signs the user in or out */
 function inOut() {
 
-	console.log("Enters inOut");
-	var user = firebase.auth().currentUser;
-	console.log("User: " + user);
+	/* Checks if there is a current user */
+	var user = firebase.auth().currentUser; 
+
+	/* If there is a user, then sign in */
 	if (user == null) {
-		console.log("Sign in");
 		/* Sign in */
 		document.getElementById("sCol").appendChild(signInButton);
 		document.getElementById("signInButton").innerHTML = "Sign In";
 		console.log("User: " + firebase.auth().currentUser);
 	}
+	/* If there is no user, then sign out */
 	else {
-		console.log("Sign out");
-
 		document.getElementById("signInButton").remove();
 		document.getElementById("sCol").appendChild(signOutButton);
 		document.getElementById("signOutButton").innerHTML = "Sign Out";
@@ -43,37 +57,10 @@ function inOut() {
 }
 
 
-/*
-function bucketsTest() {
-	console.log("Inside of the bucketsTest()");
-	var a = new buckets;
 
-	a.add(5);
-	a.add(3);
-	a.add(11);
-	a.add(5);
-	a.add(6);
-	a.add(1);
-
-	console.log("Size of the bucket: " + a.size();
-
-
-}
-*/
-
-
-
-
-
-
-
-var currentUser = null;
-var wholeString = null;
-var toPlaylist = null;
-var currentPlaylist = {};
-
+/* Signs the user in */
 function signIn() {
-	console.log("Enter login");
+	
 		  	/* Google sign in */
 			var provider = new firebase.auth.GoogleAuthProvider();
 			firebase.auth().signInWithPopup(provider).then(function(result) {
@@ -102,63 +89,52 @@ function signIn() {
 			  var credential = error.credential;
 			  // ...
 			});
-	console.log("Gets to the back");
+	
 }
 
-function setUser(user) {
-	wholeString = 'users/' + user + '/music/songTracker/Artist/';
-	toPlaylist = 'users/' + user + '/music/pastPlaylist/';
-	console.log("wholeString: " + wholeString);
-}
-
-function whoIsIn() {
-	var user = firebase.auth().currentUser;
-
-	var name, email, photoUrl, uid;
-
-	if (user != null) {
-	  name = user.displayName;
-	  email = user.email;
-	  photoUrl = user.photoURL;
-	  uid = user.uid;  // The user's ID, unique to the Firebase project. Do NOT use
-	                   // this value to authenticate with your backend server, if
-	                   // you have one. Use User.getToken() instead.
-	  console.log("DOES NOT ENTER " + user);
-	}
-
-	console.log("Name: " + name);
-	console.log("Email: " + email);
-	console.log("uid: " + uid);
-
-}
-
+/* Signs the user out */
 function signOut() {
 	firebase.auth().signOut().then(function() {
 	  // Sign-out successful.
 	  document.getElementById("signOutButton").remove();
 	  inOut();
-	  console.log("Sign-out successful");
+	  
 	  removeSongTracker();
 	}, function(error) {
-		console.log("An error happened");
+
 	  // An error happened.
 	});
 }
 
 
+/* Sets the strings for our artist directory and past playlist directory */
+function setUser(user) {
+	wholeString = 'users/' + user + '/music/songTracker/Artist/';
+	toPlaylist = 'users/' + user + '/music/pastPlaylist/';
+	
+}
+
+/* Loads the SongTracker once the user signs in */
 function loadSongTracker() {
 	document.getElementById('mainBody').style.display = 'block';
+	document.getElementById('previousTop').style.display = 'block';
 }
 
+/* Unloads the SongTracker once the user signs out */
 function removeSongTracker() {
 	document.getElementById('mainBody').style.display = 'none';
+	document.getElementById('previousTop').style.display = 'none';
 }
 
+/* ----------------------- SIGN IN/OUT : END ------------------------- */
 
+
+/* Creates success alert if the song is saved */
 function loadSuccess() {
 	document.getElementById('successfulAlert').innerHTML = "<div class='alert alert-success fade in'> <a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a> <strong>Success!</strong> The song was tracked.</div>";
 }
 
+/* Creates a failure alert if the song is not saved */
 function loadFailure() {
 	document.getElementById('successfulAlert').innerHTML = "<div class='alert alert-danger fade in'> <a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a> <strong>Failure!</strong> The song wasn't tracked.</div>";
 }
@@ -166,10 +142,8 @@ function loadFailure() {
 
 
 
-
+/* Reads in the input and converts it to readable form */	
 function separateNames() {
-	console.log("Enters seperate names");
-
     var x = document.getElementById("submitSong");
     var text = "";
     var i;
@@ -178,14 +152,9 @@ function separateNames() {
 
         text += str + "<br>";
     }
-    //document.getElementById("demo").innerHTML = text;
-
-    /* document.getElementById().elements[0].value == the name of the song */
-    /* document.getElementById().elements[1].value == the name of the artist */
 
     var song = document.getElementById("submitSong").elements[0].value.replace(/\s+/g, '-').toLowerCase();
     var artist = document.getElementById("submitSong").elements[1].value.replace(/\s+/g, '-').toLowerCase();
-    console.log("Song: " + song + " artist: " + artist);
 
     addTrack(song, artist);
 }
@@ -198,7 +167,6 @@ function addTrack(song, artist) {
 		
 		/* If ther artist is not there, then create a new artist and addsong */
 		if(snapshot.val() === null) {
-			console.log("Artist is not there, and thus is new");
 			createArtist(artist);
 			addSong(song, artist);
 			insertSongInPlaylist(song, artist);
@@ -206,7 +174,6 @@ function addTrack(song, artist) {
 					}
 		/* If the artist is there, then check the song */
 		else {
-			console.log("Artist is already there, and thus is old");
 			checkSong(song, artist);
 		}
 	});
@@ -230,7 +197,6 @@ function checkSong(song, artist) {
 
 		/* Add the song if the song hasn't been played */
 		if(snapshot.val() === null) {
-			console.log("Song is not there");
 			addSong(song, artist);
 			// update playlist
 			insertSongInPlaylist(song, artist);
@@ -245,7 +211,6 @@ function checkSong(song, artist) {
 				updateArtistCount(artist);
 
 				insertSongInPlaylist(song, artist);
-				console.log("does it mess up here?");
 				loadSuccess();
 			}
 			else { loadFailure(); }	
@@ -256,7 +221,6 @@ function checkSong(song, artist) {
 
 /* Adds the song onto the songTracker */
 function addSong(song, artist) {
-	console.log("enters addSong()");
 	firebase.database().ref(wholeString + artist + '/' + song).set({
 		count: 1
 	});
@@ -266,7 +230,7 @@ function addSong(song, artist) {
 	loadSuccess();
 }
 
-/* Updates the song */
+/* Updates the song's count */
 function updateSong(song, artist) {
 
 	/* Updates the amount of times the song has been played */
@@ -277,20 +241,16 @@ function updateSong(song, artist) {
 	});
 }
 
+/* Updates the artist's count */
 function updateArtistCount(artist) {
 	var currentArtist = firebase.database().ref(wholeString + artist + '/count');
 	currentArtist.transaction(function(currentCount) {
-		console.log("Current Count: " + currentCount);
 		return currentCount + 1;
 	});
 }
 
 
-function online() {
-
-}
-
-
+/* Gets our previous playlist */
 function getPastPlaylist() {
 
 firebase.database().ref(toPlaylist).once("value").then(function(snapshot) {
@@ -325,11 +285,8 @@ firebase.database().ref(toPlaylist).once("value").then(function(snapshot) {
 
 
 
-
+/* Inserts song into the previous playlist tracker */
 function insertSongInPlaylist(song, artist) {
-
-
-	console.log("Current date and time -   " + currentDateTime());
 
 	firebase.database().ref(toPlaylist).once("value").then(function(snapshot) {
 		var updates = {};
@@ -376,21 +333,14 @@ function currentDateTime() {
 }
 
 
-
-function currentPastPlaylist() {
-	// get the current top artists
-}
-
-var topArtistsArr = [];
-
 /* Function that retrieves top 5 most played artists by the user */
 /* Gets artists - amount the artist has been played - last played */
 function topArtists() {
+	/* Contains our most played artists */
+	var topArtistsArr = [];
 	var ref = firebase.database().ref(wholeString);
 	ref.once("value", function(snapshot) {
 		snapshot.forEach(function(childSnapshot) {
-			console.log("value: " + childSnapshot.val()["count"]);
-			console.log("key: " + childSnapshot.key);
 			var pair = [childSnapshot.val()["count"], childSnapshot.key];
 			topArtistsArr.push(pair);
 		});
@@ -399,8 +349,6 @@ function topArtists() {
 		topArtistsArr.sort(function(a, b){
 			return b[0] - a[0];
 		});
-		
-		
 
 		/* At this point we have the top artist in order */
 
@@ -419,8 +367,3 @@ function topArtists() {
 	
 }
 
-/* Function that retrieves the last 5 songs played */
-/* artist - song - date - time */
-function pastPlaylist() {
-
-}
