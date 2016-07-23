@@ -6,5 +6,5 @@ SongTracker is a small web applicaiton that tracks played songs by the user in o
 #How to run:
 1. Set up local host
 2. Clone songTracker to your "www" folder with 'git clone https://github.com/raymondarevalo/SongTracker.git'
-3. Type 'songTracker/index.html' into your browser
+3. Type 'localhost/songTracker/index.html' into your browser
 4. Sign in with your Google account.
